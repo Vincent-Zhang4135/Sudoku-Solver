@@ -1,4 +1,9 @@
+import os
 import puzzles
+import time
+
+def clear_screen():
+    os.system("clear")
 
 def print_sudoku(sudoku):
     if sudoku == None:
@@ -10,8 +15,9 @@ def print_sudoku(sudoku):
         print("|".join(map(str, row)))
     print("------------------")    
 
-
-def solve_sudoku(sudoku):
+# use the speed parameter to determine how quickly the sudoku solver iterates through
+# this allows for you to see the backtraching in progress
+def solve_sudoku(sudoku, speed):
     """
         solve sudoku uses a recursive backtracking algorithm that takes advantage
         of the list of lists being mutable, allowing us to store our current
@@ -23,14 +29,18 @@ def solve_sudoku(sudoku):
     col = coord[1]
 
     # if we reached the end of the sudoku and had no contradictions 
-    # along the way, then a solution has been found:
+    # along the way, then a solution has ben found:
     if row == None:
         return sudoku
 
     for guess in range(1, 10):
         if check_is_valid(sudoku, guess, coord):
             sudoku[row][col] = guess
-            if solve_sudoku(sudoku):
+            print_sudoku(sudoku)
+            time.sleep(speed)
+            clear_screen()
+            if solve_sudoku(sudoku, speed):
+                print_sudoku(sudoku)
                 return sudoku
             else:
                 sudoku[row][col] = 0
@@ -90,7 +100,9 @@ def check_is_valid(sudoku, guess, coord):
 
 if __name__ == '__main__':
     #print_sudoku(solve_sudoku(puzzles.sudoku1))
-    #print_sudoku(solve_sudoku(puzzles.sudoku2))
+    print_sudoku(solve_sudoku(puzzles.sudoku2, 0.1))
+    clear_screen()
     #print_sudoku(solve_sudoku(puzzles.sudoku3))
+
     #print_sudoku(solve_sudoku(puzzles.sudoku4))
     pass
